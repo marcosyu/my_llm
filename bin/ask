@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require_relative "../ollama_client"
+
+query = ARGV.join(" ")
+puts ::Llm::OllamaClient.new(query).ask
