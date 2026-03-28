@@ -10,22 +10,21 @@ module Llm
           prompt: prompt,
           stream: true
         }.to_json
-
+        full_response = []
         Net::HTTP.start(uri.host, uri.port) do |http|
           http.request(req) do |res|
             res.read_body do |chunk|
-              # Each chunk may contain partial JSON lines
               begin
                 data = JSON.parse(chunk)
-                if data["response"]
-                  print data["response"] # print partially
-                end
+                print data["response"] if data["response"]
+                full_response << data["response"] if data["response"]
               rescue JSON::ParserError
                 # Sometimes partial JSON, ignore until complete
               end
             end
           end
         end
+        full_response.join
       end
 
       private

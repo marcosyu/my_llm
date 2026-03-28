@@ -1,5 +1,17 @@
 #!/usr/bin/env ruby
 require_relative "../ollama_client"
+require 'optparse'
+
+options = {
+  thread: "default"
+}
+
+OptionParser.new do |opts|
+  opts.on("-tTHREAD", "--thread=THREAD", "Thread name") do |t|
+    options[:thread] = t
+  end
+end.parse!
 
 query = ARGV.join(" ")
-puts ::Llm::OllamaClient.new(query).ask
+
+puts ::Llm::OllamaClient.new(query, thread: options[:thread]).ask
