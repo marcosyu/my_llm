@@ -9,7 +9,7 @@ module Llm
 
     def self.persist(thread, data)
       file = File.expand_path("~/.llm_threads/#{thread}.json")
-      FileUtils.mkdir_p(File.dirname(file)) unless File.exist?(file)
+      FileUtils.mkdir_p(File.dirname(file))
 
       File.open(file, 'w+') do |f|
         f.write(data.to_json)

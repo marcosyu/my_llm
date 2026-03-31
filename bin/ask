@@ -3,15 +3,20 @@ require_relative "../ollama_client"
 require 'optparse'
 
 options = {
-  thread: "default"
+  thread: "default",
+  use_web: false
 }
 
 OptionParser.new do |opts|
   opts.on("-tTHREAD", "--thread=THREAD", "Thread name") do |t|
     options[:thread] = t
   end
+
+  opts.on("--use-web", "Enable use_web (defaults to false)") do
+    options[:use_web] = true
+  end
 end.parse!
 
 query = ARGV.join(" ")
 
-puts ::Llm::OllamaClient.new(query, thread: options[:thread]).ask
+puts ::Llm::OllamaClient.new(query, thread: options[:thread], use_web: options[:use_web]).ask

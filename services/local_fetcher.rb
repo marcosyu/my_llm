@@ -1,12 +1,12 @@
 module Llm
   module Services
     class LocalFetcher
-      def self.generate(prompt)
+      def self.generate(prompt, model)
         uri = URI("http://localhost:11434/api/generate")
         req = Net::HTTP::Post.new(uri)
         req["Content-Type"] = "application/json"
         req.body = {
-          model: model_selector(prompt),
+          model: model,
           prompt: prompt,
           stream: true
         }.to_json
@@ -25,18 +25,6 @@ module Llm
           end
         end
         full_response.join
-      end
-
-      private
-
-      def self.model_selector(prompt)
-        if prompt.match?(/code|refactor|syntax|naming|method|variable/i)
-          "deepseek-coder"
-        elsif prompt.match?(/plan|architecture|multi-step|integrate/i)
-          "llama3"
-        else
-          "mistral"
-        end
       end
     end
   end

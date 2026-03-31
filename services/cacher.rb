@@ -11,10 +11,14 @@ module Llm
       end
 
       def fetch
-        response = yield
+        begin
+          response = yield
+          add_to_memory(response)
 
-        add_to_memory(response)
-
+        rescue => e
+          print "Error in fetch: #{e.class} - #{e.message}\n"
+          raise
+        end
         response
       end
 
